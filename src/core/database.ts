@@ -1,4 +1,3 @@
-import * as pg from 'pg';
 import Knex from 'knex';
 import Bookshelf from 'bookshelf';
 
