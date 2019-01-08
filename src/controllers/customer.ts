@@ -1,20 +1,21 @@
-import { successResponse } from '../utils';
+import { errorResponse, successResponse } from '../utils';
+import Customer from '../models/Customer';
 
 /**
  * Get listing of the resource
  *
- * @param event
+ * @param _event
  * @param _context
  * @param callback
  */
-export const index: AWSLambda.Handler = (
-  event: AWSLambda.APIGatewayEvent,
+export const index: AWSLambda.Handler = async (
+  _event: AWSLambda.APIGatewayEvent,
   _context,
   callback,
 ) => {
+  const customers = await Customer.fetchAll();
   const response = successResponse({
-    customers: [],
-    input: event
+    customers
   });
 
   callback(null, response);
@@ -27,15 +28,32 @@ export const index: AWSLambda.Handler = (
  * @param _context
  * @param callback
  */
-export const load: AWSLambda.Handler = (
+export const load: AWSLambda.Handler = async (
   event: AWSLambda.APIGatewayEvent,
   _context,
   callback,
 ) => {
-  const response = successResponse({
-    customer: {},
-    input: event
-  });
+  let response;
+  // Validate request
+  if (!event || !event.pathParameters || !event.pathParameters.id) {
+    response = errorResponse({
+      message: 'The id field is required'
+    });
+  } else {
+    // Load customer
+    let customer;
+    const customerId = event.pathParameters.id;
+    try {
+      customer = await new Customer().where('id', customerId).fetch();
+      response = successResponse({
+        customer
+      });
+    } catch (e) {
+      response = errorResponse({
+        message: 'The customer does not exist'
+      });
+    }
+  }
 
   callback(null, response);
 };
@@ -47,14 +65,14 @@ export const load: AWSLambda.Handler = (
  * @param _context
  * @param callback
  */
-export const store: AWSLambda.Handler = (
+export const store: AWSLambda.Handler = async (
   event: AWSLambda.APIGatewayEvent,
   _context,
   callback,
 ) => {
   const response = successResponse({
     customer: {},
-    input: event
+    input: event,
   });
 
   callback(null, response);
@@ -74,7 +92,7 @@ export const update: AWSLambda.Handler = (
 ) => {
   const response = successResponse({
     customer: {},
-    input: event
+    input: event,
   });
 
   callback(null, response);
@@ -94,7 +112,7 @@ export const deleteResource: AWSLambda.Handler = (
 ) => {
   const response = successResponse({
     customer: {},
-    input: event
+    input: event,
   });
 
   callback(null, response);

@@ -11,6 +11,9 @@ const config: Knex.Config = {
     max: 1,
     min: 0,
   },
+  migrations: {
+    tableName: 'migrations'
+  }
 };
 
 export const knex = Knex(config);
