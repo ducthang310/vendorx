@@ -23,9 +23,8 @@ provider:
   # If you want to change to a different AWS profile
   # from ~/.aws/credentials, you can do so here
   profile: default
-  # you can overwrite defaults here
-  #  stage: dev
-  #  region: us-east-1
+  stage: dev
+  region: ap-southeast-1
 
 custom:
   webpackIncludeModules: true
@@ -83,6 +82,188 @@ functions:
       - schedule:
           rate: rate(5 minutes)
           enabled: true
+
+  customerList:
+    handler: src/controllers/customer.index
+    events:
+    - http:
+        path: customers
+        method: get
+
+  customerLoad:
+    handler: src/controllers/customer.load
+    events:
+    - http:
+        path: customers/{id}
+        method: get
+
+  customerCreate:
+    handler: src/controllers/customer.store
+    events:
+    - http:
+        path: customers/{id}
+        method: post
+
+  customerUpdate:
+    handler: src/controllers/customer.update
+    events:
+    - http:
+        path: customers/{id}
+        method: patch
+
+  customerDelete:
+    handler: src/controllers/customer.deleteResource
+    events:
+    - http:
+        path: customers/{id}
+        method: delete
+        
+
+  orderList:
+    handler: src/controllers/order.index
+    events:
+    - http:
+        path: orders
+        method: get
+
+  orderLoad:
+    handler: src/controllers/order.load
+    events:
+    - http:
+        path: orders/{id}
+        method: get
+
+  orderCreate:
+    handler: src/controllers/order.store
+    events:
+    - http:
+        path: orders/{id}
+        method: post
+
+  orderUpdate:
+    handler: src/controllers/order.update
+    events:
+    - http:
+        path: orders/{id}
+        method: patch
+
+  orderDelete:
+    handler: src/controllers/order.deleteResource
+    events:
+    - http:
+        path: orders/{id}
+        method: delete
+
+  productList:
+    handler: src/controllers/product.index
+    events:
+    - http:
+        path: products
+        method: get
+
+  productLoad:
+    handler: src/controllers/product.load
+    events:
+    - http:
+        path: products/{id}
+        method: get
+
+  productCreate:
+    handler: src/controllers/product.store
+    events:
+    - http:
+        path: products/{id}
+        method: post
+
+  productUpdate:
+    handler: src/controllers/product.update
+    events:
+    - http:
+        path: products/{id}
+        method: patch
+
+  productDelete:
+    handler: src/controllers/product.deleteResource
+    events:
+    - http:
+        path: products/{id}
+        method: delete
+
+  transactionList:
+    handler: src/controllers/transaction.index
+    events:
+    - http:
+        path: transactions
+        method: get
+
+  transactionLoad:
+    handler: src/controllers/transaction.load
+    events:
+    - http:
+        path: transactions/{id}
+        method: get
+
+  transactionCreate:
+    handler: src/controllers/transaction.store
+    events:
+    - http:
+        path: transactions/{id}
+        method: post
+
+  transactionUpdate:
+    handler: src/controllers/transaction.update
+    events:
+    - http:
+        path: transactions/{id}
+        method: patch
+
+  transactionDelete:
+    handler: src/controllers/transaction.deleteResource
+    events:
+    - http:
+        path: transactions/{id}
+        method: delete
+
+  userList:
+    handler: src/controllers/user.index
+    events:
+    - http:
+        path: users
+        method: get
+
+  userLoad:
+    handler: src/controllers/user.load
+    events:
+    - http:
+        path: users/{id}
+        method: get
+
+  userCreate:
+    handler: src/controllers/user.store
+    events:
+    - http:
+        path: users/{id}
+        method: post
+
+  userUpdate:
+    handler: src/controllers/user.update
+    events:
+    - http:
+        path: users/{id}
+        method: patch
+
+  userDelete:
+    handler: src/controllers/user.deleteResource
+    events:
+    - http:
+        path: users/{id}
+        method: delete
+
+  ses:
+    memorySize: 256
+    timeout: 35
+    description: listens to events from SES's s3 box, parses emails, and puts them into the system..
+    handler: src/controllers/ses.handle
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
