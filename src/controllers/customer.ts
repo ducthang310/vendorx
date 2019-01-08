@@ -1,5 +1,6 @@
 import { errorResponse, successResponse } from '../utils';
 import Customer from '../models/Customer';
+import moment from 'moment';
 
 /**
  * Get listing of the resource
@@ -70,10 +71,27 @@ export const store: AWSLambda.Handler = async (
   _context,
   callback,
 ) => {
-  const response = successResponse({
-    customer: {},
-    input: event,
-  });
+  let response;
+  let body;
+  try {
+    body = event.body ? JSON.parse(event.body) : null;
+    const data = {
+      name: body.name,
+      email: body.email,
+      phone: body.phone,
+      created_at: moment().format('YYYY MM DD HH:mm:ss'),
+      updated_at: moment().format('YYYY MM DD HH:mm:ss')
+    };
+    const newCustomer = await new Customer(data).save(undefined, {method: 'insert'});
+
+    response = successResponse({
+      customer: newCustomer,
+    });
+  } catch (e) {
+    response = errorResponse({
+      message: 'Parameters is invalid'
+    });
+  }
 
   callback(null, response);
 };

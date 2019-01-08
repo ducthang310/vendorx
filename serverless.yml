@@ -25,6 +25,8 @@ provider:
   profile: default
   stage: dev
   region: ap-southeast-1
+  environment:
+    DB_CONNECTION_STRING: postgres://user:password@hostname:5432/database
 
 custom:
   webpackIncludeModules: true
@@ -101,7 +103,7 @@ functions:
     handler: src/controllers/customer.store
     events:
     - http:
-        path: customers/{id}
+        path: customers
         method: post
 
   customerUpdate:
@@ -137,7 +139,7 @@ functions:
     handler: src/controllers/order.store
     events:
     - http:
-        path: orders/{id}
+        path: orders
         method: post
 
   orderUpdate:
@@ -172,7 +174,7 @@ functions:
     handler: src/controllers/product.store
     events:
     - http:
-        path: products/{id}
+        path: products
         method: post
 
   productUpdate:
@@ -207,7 +209,7 @@ functions:
     handler: src/controllers/transaction.store
     events:
     - http:
-        path: transactions/{id}
+        path: transactions
         method: post
 
   transactionUpdate:
@@ -242,7 +244,7 @@ functions:
     handler: src/controllers/user.store
     events:
     - http:
-        path: users/{id}
+        path: users
         method: post
 
   userUpdate:
