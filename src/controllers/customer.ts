@@ -75,18 +75,31 @@ export const store: AWSLambda.Handler = async (
   let body;
   try {
     body = event.body ? JSON.parse(event.body) : null;
-    const data = {
-      name: body.name,
-      email: body.email,
-      phone: body.phone,
-      created_at: moment().format('YYYY MM DD HH:mm:ss'),
-      updated_at: moment().format('YYYY MM DD HH:mm:ss')
-    };
-    const newCustomer = await new Customer(data).save(undefined, {method: 'insert'});
+    let existedCustomer;
+    try {
+      existedCustomer = await new Customer().where('email', body.email).fetch();
+    } catch (e) {
+      console.log(e);
+    }
 
-    response = successResponse({
-      customer: newCustomer,
-    });
+    if (existedCustomer) {
+      response = errorResponse({
+        message: 'The customer has already existed'
+      });
+    } else {
+      const data = {
+        name: body.name,
+        email: body.email,
+        phone: body.phone,
+        created_at: moment().format('YYYY MM DD HH:mm:ss'),
+        updated_at: moment().format('YYYY MM DD HH:mm:ss')
+      };
+      const newCustomer = await new Customer(data).save(undefined, {method: 'insert'});
+
+      response = successResponse({
+        customer: newCustomer,
+      });
+    }
   } catch (e) {
     response = errorResponse({
       message: 'Parameters is invalid'
@@ -103,15 +116,57 @@ export const store: AWSLambda.Handler = async (
  * @param _context
  * @param callback
  */
-export const update: AWSLambda.Handler = (
+export const update: AWSLambda.Handler = async (
   event: AWSLambda.APIGatewayEvent,
   _context,
   callback,
 ) => {
-  const response = successResponse({
-    customer: {},
-    input: event,
-  });
+  let response;
+  // Validate request
+  if (!event || !event.pathParameters || !event.pathParameters.id) {
+    response = errorResponse({
+      message: 'The id field is required'
+    });
+  } else {
+    // Load customer
+    let customer;
+    const customerId = event.pathParameters.id;
+    try {
+      customer = await new Customer().where('id', customerId).fetch();
+
+      try {
+        const body = event.body ? JSON.parse(event.body) : null;
+
+        if (!!body.name || !!body.email || !!body.phone) {
+          const data = {
+            name: !!body.name ? body.name : undefined,
+            email: !!body.email ? body.email : undefined,
+            phone: !!body.phone ? body.phone : undefined
+          };
+
+          await new Customer()
+            .where('id', customerId)
+            .save(data, {method: 'update', patch: true});
+
+          response = successResponse({
+            customer
+          });
+        } else {
+          response = errorResponse({
+            message: 'No data for updating'
+          });
+        }
+      } catch (e) {
+        response = errorResponse({
+          error: e
+        });
+      }
+    } catch (e) {
+      response = errorResponse({
+        message: 'The customer does not exist'
+      });
+    }
+  }
 
   callback(null, response);
 };
@@ -123,15 +178,31 @@ export const update: AWSLambda.Handler = (
  * @param _context
  * @param callback
  */
-export const deleteResource: AWSLambda.Handler = (
+export const deleteResource: AWSLambda.Handler = async (
   event: AWSLambda.APIGatewayEvent,
   _context,
   callback,
 ) => {
-  const response = successResponse({
-    customer: {},
-    input: event,
-  });
+  let response;
+  // Validate request
+  if (!event || !event.pathParameters || !event.pathParameters.id) {
+    response = errorResponse({
+      message: 'The id field is required'
+    });
+  } else {
+    const customerId = event.pathParameters.id;
+    try {
+      await new Customer().where('id', customerId).destroy();
+
+      response = successResponse({
+        message: 'Deleted successfully'
+      });
+    } catch (e) {
+      response = errorResponse({
+        message: 'The customer does not exist'
+      });
+    }
+  }
 
   callback(null, response);
 };
