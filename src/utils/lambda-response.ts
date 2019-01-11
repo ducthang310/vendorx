@@ -24,29 +24,19 @@ function lambdaResponse({
   const response: IResponse = {
     statusCode,
     body: JSON.stringify(json),
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': allowCORS ? '*' : undefined
+    }
   };
-
-  if (allowCORS) {
-    response.headers = {
-      'Access-Control-Allow-Origin': '*',
-    };
-  }
 
   return response;
 }
 
-export function errorResponse(json: IJSON) {
+export function errorResponse(json: IJSON, statusCode?: number) {
   return lambdaResponse({
     json,
-    statusCode: 500,
-  });
-}
-
-export function corsErrorResponse(json: IJSON) {
-  return lambdaResponse({
-    json,
-    statusCode: 500,
-    allowCORS: true,
+    statusCode: statusCode ? statusCode : 500,
   });
 }
 
@@ -54,13 +44,5 @@ export function successResponse(json: IJSON) {
   return lambdaResponse({
     json,
     statusCode: 200,
-  });
-}
-
-export function corsSuccessResponse(json: IJSON) {
-  return lambdaResponse({
-    json,
-    statusCode: 200,
-    allowCORS: true,
   });
 }

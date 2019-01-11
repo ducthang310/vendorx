@@ -7,19 +7,19 @@ import moment from 'moment';
  *
  * @param _event
  * @param _context
- * @param callback
+ * @param _callback
  */
 export const index: AWSLambda.Handler = async (
   _event: AWSLambda.APIGatewayEvent,
   _context,
-  callback,
+  _callback,
 ) => {
   const products = await Product.fetchAll();
   const response = successResponse({
     products
   });
 
-  callback(null, response);
+  return response;
 };
 
 /**
@@ -27,19 +27,19 @@ export const index: AWSLambda.Handler = async (
  *
  * @param event
  * @param _context
- * @param callback
+ * @param _callback
  */
 export const load: AWSLambda.Handler = async (
   event: AWSLambda.APIGatewayEvent,
   _context,
-  callback,
+  _callback,
 ) => {
   let response;
   // Validate request
   if (!event || !event.pathParameters || !event.pathParameters.id) {
     response = errorResponse({
       message: 'The id field is required'
-    });
+    }, 400);
   } else {
     // Load product
     let product;
@@ -52,11 +52,11 @@ export const load: AWSLambda.Handler = async (
     } catch (e) {
       response = errorResponse({
         message: 'The product does not exist'
-      });
+      }, 404);
     }
   }
 
-  callback(null, response);
+  return response;
 };
 
 /**
@@ -64,12 +64,12 @@ export const load: AWSLambda.Handler = async (
  *
  * @param event
  * @param _context
- * @param callback
+ * @param _callback
  */
 export const store: AWSLambda.Handler = async (
   event: AWSLambda.APIGatewayEvent,
   _context,
-  callback,
+  _callback,
 ) => {
   let response;
   let body;
@@ -85,7 +85,7 @@ export const store: AWSLambda.Handler = async (
     if (existedProduct) {
       response = errorResponse({
         message: 'The product has already existed'
-      });
+      }, 400);
     } else {
       const data = {
         name: body.name,
@@ -104,10 +104,10 @@ export const store: AWSLambda.Handler = async (
     console.log(e);
     response = errorResponse({
       error: 'Parameters is invalid'
-    });
+    }, 400);
   }
 
-  callback(null, response);
+  return response;
 };
 
 /**
@@ -115,19 +115,19 @@ export const store: AWSLambda.Handler = async (
  *
  * @param event
  * @param _context
- * @param callback
+ * @param _callback
  */
 export const update: AWSLambda.Handler = async (
   event: AWSLambda.APIGatewayEvent,
   _context,
-  callback,
+  _callback,
 ) => {
   let response;
   // Validate request
   if (!event || !event.pathParameters || !event.pathParameters.id) {
     response = errorResponse({
       message: 'The id field is required'
-    });
+    }, 400);
   } else {
     // Load product
     let product;
@@ -155,21 +155,21 @@ export const update: AWSLambda.Handler = async (
         } else {
           response = errorResponse({
             message: 'No data for updating'
-          });
+          }, 400);
         }
       } catch (e) {
         response = errorResponse({
           error: e
-        });
+        }, 500);
       }
     } catch (e) {
       response = errorResponse({
         message: 'The product does not exist'
-      });
+      }, 404);
     }
   }
 
-  callback(null, response);
+  return response;
 };
 
 /**
@@ -177,19 +177,19 @@ export const update: AWSLambda.Handler = async (
  *
  * @param event
  * @param _context
- * @param callback
+ * @param _callback
  */
 export const deleteResource: AWSLambda.Handler = async (
   event: AWSLambda.APIGatewayEvent,
   _context,
-  callback,
+  _callback,
 ) => {
   let response;
   // Validate request
   if (!event || !event.pathParameters || !event.pathParameters.id) {
     response = errorResponse({
       message: 'The id field is required'
-    });
+    }, 400);
   } else {
     const productId = event.pathParameters.id;
     try {
@@ -201,9 +201,9 @@ export const deleteResource: AWSLambda.Handler = async (
     } catch (e) {
       response = errorResponse({
         message: 'The product does not exist'
-      });
+      }, 404);
     }
   }
 
-  callback(null, response);
+  return response;
 };
