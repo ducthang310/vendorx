@@ -18,15 +18,14 @@ interface IResponse {
 
 function lambdaResponse({
   json,
-  statusCode,
-  allowCORS = false,
+  statusCode
 }: IResponseOptions) {
   const response: IResponse = {
     statusCode,
     body: JSON.stringify(json),
     headers: {
       'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': allowCORS ? '*' : undefined
+      'Access-Control-Allow-Origin': '*'
     }
   };
 
