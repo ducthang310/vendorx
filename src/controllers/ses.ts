@@ -1,6 +1,8 @@
 // import { S3EventRecord } from 'aws-lambda';
 import { S3 } from 'aws-sdk';
 import { parseEmailFile } from '../utils/mail';
+import moment from 'moment';
+import Transaction from '../models/Transaction';
 // import * as stream from 'stream';
 // import { ParsedMail } from 'mailparser';
 // import moment from 'moment';
@@ -21,46 +23,37 @@ export const handle: AWSLambda.Handler = (
 ) => {
   const records = event.Records;
 
-  records.forEach(record => {
-    console.log(`${record.s3.bucket.name} - ${record.s3.object.key}`);
+  try {
+    records.forEach(async record => {
+      console.log(`${record.s3.bucket.name} - ${record.s3.object.key}`);
+      const s3 = new S3();
+      const emailFile = s3
+        .getObject({
+          Bucket: record.s3.bucket.name,
+          Key: record.s3.object.key,
+        })
+        .createReadStream();
+      const parsedEmail: any = await parseEmailFile(emailFile);
+      const sender: string = parsedEmail.from && parsedEmail.from[0] && parsedEmail.from[0].address ? parsedEmail.from[0].address.toLowerCase() : '';
+      const subject: string = parsedEmail.subject;
+      const source: string = `Sender: ${sender} \n`
+        + `Subject: ${subject}`
+      ;
+      const data = {
+        customer_id: null,
+        created_by: 'SES',
+        type: 'email',
+        source,
+        created_at: moment().format('YYYY MM DD HH:mm:ss'),
+        updated_at: moment().format('YYYY MM DD HH:mm:ss'),
+      };
+      new Transaction(data).save(undefined, { method: 'insert' });
+      console.log('----finish, source: ');
+      console.log(source);
 
-    const {
-      s3: {
-        bucket: { name: bucketName },
-        object: { key: objectKey },
-      },
-    } = record
-
-    const s3 = new S3();
-
-    const getEmailFile = new Promise((resolve, reject) => {
-      try {
-        const emailFile = s3
-          .getObject({
-            Bucket: bucketName,
-            Key: objectKey,
-          })
-          .createReadStream()
-
-        resolve(emailFile)
-      } catch (error) {
-        console.log('error getting email file')
-        reject(error)
-      }
     });
-
-    console.log('getting email file')
-    getEmailFile
-      .then(parseEmailFile)
-      .then(e => {
-        console.log('email file parsed')
-        console.log(e);
-
-      })
-      .catch(error => {
-        console.error(error);
-        callback(error)
-      })
-  })
-
+  } catch (e) {
+    console.log(e);
+    callback(e);
+  }
 };

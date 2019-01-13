@@ -28,15 +28,7 @@ const parseEmailFile = (file) => {
         file = createReadStream(file as string);
       }
 
-      //  define event listeners on mailParser object
-      mailParser.on('headers', headers => {
-        console.log('---parseEmailFile: headers');
-        console.log(headers);
-      });
-
       mailParser.on('end', mail => {
-        console.log('---parseEmailFile: end');
-        console.log(mail)
         resolve(mail);
       });
 

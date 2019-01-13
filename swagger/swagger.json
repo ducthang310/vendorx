@@ -7,7 +7,7 @@
       "name": "MIT"
     }
   },
-  "host": "a4z073i9ub.execute-api.ap-southeast-1.amazonaws.com",
+  "host": "f9wwj4qkll.execute-api.ap-southeast-1.amazonaws.com",
   "basePath": "/dev",
   "schemes": [
     "https"
@@ -19,6 +19,176 @@
     "application/json"
   ],
   "paths": {
+    "/phlo": {
+      "post": {
+        "summary": "Store info to transaction table",
+        "operationId": "phloStore",
+        "tags": [
+          "Phlo"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "params",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PhloCall",
+              "example": {
+                "recording_url": "https://media.plivo.com/v1/Account/MAODFMYZU0OWQ4OTM5ZW/Recording/48189176-1619-11e9-979c-06ab91ce7322.mp3",
+                "recording_uuid": "48189176-1619-11e9-979c-06ab91ce7322",
+                "recording_duration": "5640",
+                "queue_id": "139833",
+                "order_type": "call",
+                "from": "61409916620",
+                "to": "61280839559",
+                "tags": [
+                  "voice",
+                  "open"
+                ],
+                "call_uuid": "3f6788c0-1619-11e9-a9d0-6725cbde0839"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Null response"
+          },
+          "200": {
+            "description": "Ok"
+          },
+          "default": {
+            "description": "unexpected error"
+          }
+        }
+      }
+    },
+
+    "/transactions": {
+      "get": {
+        "summary": "Get listing of transaction",
+        "operationId": "listTransactions",
+        "tags": [
+          "Transaction"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "default": {
+            "description": "unexpected error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a transaction",
+        "operationId": "createPets",
+        "tags": [
+          "Transaction"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "params",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Null response"
+          },
+          "200": {
+            "description": "Ok"
+          },
+          "default": {
+            "description": "unexpected error"
+          }
+        }
+      }
+    },
+    "/transactions/{id}": {
+      "get": {
+        "summary": "Get a specified transaction",
+        "operationId": "loadTransactions",
+        "tags": [
+          "Transaction"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transaction info"
+          },
+          "default": {
+            "description": "unexpected error"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a specified transaction",
+        "operationId": "updateTransaction",
+        "tags": [
+          "Transaction"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "params",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "default": {
+            "description": "unexpected error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a specified transaction",
+        "operationId": "deleteTransaction",
+        "tags": [
+          "Transaction"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "default": {
+            "description": "unexpected error"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ]
+      }
+    },
+
     "/customers": {
       "get": {
         "summary": "Get listing of customer",
@@ -392,155 +562,42 @@
           }
         ]
       }
-    },
-
-    "/transactions": {
-      "get": {
-        "summary": "Get listing of transaction",
-        "operationId": "listTransactions",
-        "tags": [
-          "Transaction"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "default": {
-            "description": "unexpected error"
-          }
-        }
-      },
-      "post": {
-        "summary": "Create a transaction",
-        "operationId": "createPets",
-        "tags": [
-          "Transaction"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "params",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Transaction"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Null response"
-          },
-          "200": {
-            "description": "Ok"
-          },
-          "default": {
-            "description": "unexpected error"
-          }
-        }
-      }
-    },
-    "/transactions/{id}": {
-      "get": {
-        "summary": "Get a specified transaction",
-        "operationId": "loadTransactions",
-        "tags": [
-          "Transaction"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Transaction info"
-          },
-          "default": {
-            "description": "unexpected error"
-          }
-        }
-      },
-      "patch": {
-        "summary": "Update a specified transaction",
-        "operationId": "updateTransaction",
-        "tags": [
-          "Transaction"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "params",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Transaction"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Ok"
-          },
-          "default": {
-            "description": "unexpected error"
-          }
-        }
-      },
-      "delete": {
-        "summary": "Delete a specified transaction",
-        "operationId": "deleteTransaction",
-        "tags": [
-          "Transaction"
-        ],
-        "responses": {
-          "200": {
-            "description": "Ok"
-          },
-          "default": {
-            "description": "unexpected error"
-          }
-        },
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "type": "string"
-          }
-        ]
-      }
-    },
-
-    "/ses": {
-      "post": {
-        "summary": "Updating...",
-        "operationId": "ses",
-        "tags": [
-          "SES"
-        ],
-        "responses": {
-          "201": {
-            "description": "Null response"
-          },
-          "200": {
-            "description": "Ok"
-          },
-          "default": {
-            "description": "unexpected error"
-          }
-        }
-      }
     }
+
   },
   "definitions": {
+    "Phlo": {
+      "type": "object",
+      "properties": {
+        "recording_url": {
+          "type": "string"
+        },
+        "recording_uuid": {
+          "type": "string"
+        },
+        "recording_duration": {
+          "type": "string"
+        },
+        "queue_id": {
+          "type": "string"
+        },
+        "order_type": {
+          "type": "string"
+        },
+        "from": {
+          "type": "string"
+        },
+        "to": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "array"
+        },
+        "call_uuid": {
+          "type": "string"
+        }
+      }
+    },
     "Customer": {
       "type": "object",
       "properties": {
