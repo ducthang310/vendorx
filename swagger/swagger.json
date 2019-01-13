@@ -1,0 +1,610 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "0.1.0",
+    "title": "VendorX API",
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "host": "a4z073i9ub.execute-api.ap-southeast-1.amazonaws.com",
+  "basePath": "/dev",
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/customers": {
+      "get": {
+        "summary": "Get listing of customer",
+        "operationId": "listCustomers",
+        "tags": [
+          "Customer"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "default": {
+            "description": "unexpected error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a customer",
+        "operationId": "createPets",
+        "tags": [
+          "Customer"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "params",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Customer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Null response"
+          },
+          "200": {
+            "description": "Ok"
+          },
+          "default": {
+            "description": "unexpected error"
+          }
+        }
+      }
+    },
+    "/customers/{id}": {
+      "get": {
+        "summary": "Get a specified customer",
+        "operationId": "loadCustomers",
+        "tags": [
+          "Customer"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Customer info"
+          },
+          "default": {
+            "description": "unexpected error"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a specified customer",
+        "operationId": "updateCustomer",
+        "tags": [
+          "Customer"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "params",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Customer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "default": {
+            "description": "unexpected error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a specified customer",
+        "operationId": "deleteCustomer",
+        "tags": [
+          "Customer"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "default": {
+            "description": "unexpected error"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ]
+      }
+    },
+
+    "/orders": {
+      "get": {
+        "summary": "Get listing of order",
+        "operationId": "listOrders",
+        "tags": [
+          "Order"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "default": {
+            "description": "unexpected error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a order",
+        "operationId": "createPets",
+        "tags": [
+          "Order"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "params",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Null response"
+          },
+          "200": {
+            "description": "Ok"
+          },
+          "default": {
+            "description": "unexpected error"
+          }
+        }
+      }
+    },
+    "/orders/{id}": {
+      "get": {
+        "summary": "Get a specified order",
+        "operationId": "loadOrders",
+        "tags": [
+          "Order"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order info"
+          },
+          "default": {
+            "description": "unexpected error"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a specified order",
+        "operationId": "updateOrder",
+        "tags": [
+          "Order"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "params",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "default": {
+            "description": "unexpected error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a specified order",
+        "operationId": "deleteOrder",
+        "tags": [
+          "Order"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "default": {
+            "description": "unexpected error"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ]
+      }
+    },
+
+    "/products": {
+      "get": {
+        "summary": "Get listing of product",
+        "operationId": "listProducts",
+        "tags": [
+          "Product"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "default": {
+            "description": "unexpected error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a product",
+        "operationId": "createPets",
+        "tags": [
+          "Product"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "params",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Null response"
+          },
+          "200": {
+            "description": "Ok"
+          },
+          "default": {
+            "description": "unexpected error"
+          }
+        }
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "summary": "Get a specified product",
+        "operationId": "loadProducts",
+        "tags": [
+          "Product"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product info"
+          },
+          "default": {
+            "description": "unexpected error"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a specified product",
+        "operationId": "updateProduct",
+        "tags": [
+          "Product"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "params",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "default": {
+            "description": "unexpected error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a specified product",
+        "operationId": "deleteProduct",
+        "tags": [
+          "Product"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "default": {
+            "description": "unexpected error"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ]
+      }
+    },
+
+    "/transactions": {
+      "get": {
+        "summary": "Get listing of transaction",
+        "operationId": "listTransactions",
+        "tags": [
+          "Transaction"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "default": {
+            "description": "unexpected error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a transaction",
+        "operationId": "createPets",
+        "tags": [
+          "Transaction"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "params",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Null response"
+          },
+          "200": {
+            "description": "Ok"
+          },
+          "default": {
+            "description": "unexpected error"
+          }
+        }
+      }
+    },
+    "/transactions/{id}": {
+      "get": {
+        "summary": "Get a specified transaction",
+        "operationId": "loadTransactions",
+        "tags": [
+          "Transaction"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transaction info"
+          },
+          "default": {
+            "description": "unexpected error"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a specified transaction",
+        "operationId": "updateTransaction",
+        "tags": [
+          "Transaction"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "params",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "default": {
+            "description": "unexpected error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a specified transaction",
+        "operationId": "deleteTransaction",
+        "tags": [
+          "Transaction"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "default": {
+            "description": "unexpected error"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ]
+      }
+    },
+
+    "/ses": {
+      "post": {
+        "summary": "Updating...",
+        "operationId": "ses",
+        "tags": [
+          "SES"
+        ],
+        "responses": {
+          "201": {
+            "description": "Null response"
+          },
+          "200": {
+            "description": "Ok"
+          },
+          "default": {
+            "description": "unexpected error"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Customer": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "phone": {
+          "type": "string"
+        }
+      }
+    },
+    "Order": {
+      "type": "object",
+      "properties": {
+        "product_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "customer_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "price": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "Product": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "sku": {
+          "type": "string"
+        },
+        "price": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "Transaction": {
+      "type": "object",
+      "properties": {
+        "customer_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "created_by": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
